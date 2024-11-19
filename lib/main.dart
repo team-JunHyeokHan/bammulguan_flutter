@@ -1,12 +1,9 @@
-
-
 import 'package:bammulguan/screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
-void main(){
+void main() {
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,9 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen()
-    );
+        theme: ThemeData(
+          fontFamily: "Eulyoo",
+            textTheme: TextTheme(
+              bodyLarge:
+              TextStyle(color: Colors.black, fontFamily: 'Pretendard'),
+                bodyMedium:
+                    TextStyle(color: Colors.black, fontFamily: 'Pretendard'))),
+        home: HomeScreen());
   }
 }
-
-
