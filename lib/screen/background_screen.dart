@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BackgroundScreen extends StatelessWidget {
   final Widget child;
@@ -54,7 +55,7 @@ class BackgroundScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("밤물관", style: textTheme.titleLarge),
-                    Text("아이콘"),
+                    IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/icons/star_icon.svg")),
                   ],
                 ),
               ),
