@@ -7,8 +7,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 화면 높이를 계산
-    final screenHeight = MediaQuery.of(context).size.height;
-    final contentHeight = screenHeight - 80;
 
     return BackgroundScreen(
       child: SafeArea(

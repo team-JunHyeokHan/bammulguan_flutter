@@ -1,4 +1,5 @@
 import 'package:bammulguan/screen/home_screen.dart';
+import 'package:bammulguan/screen/post_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

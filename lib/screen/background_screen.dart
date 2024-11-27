@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:bammulguan/screen/post_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -55,7 +56,9 @@ class BackgroundScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("밤물관", style: textTheme.titleLarge),
-                    IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/icons/star_icon.svg")),
+                    IconButton(onPressed: (){
+                      Navigator.of(context).push(_createRoute());
+                    }, icon: SvgPicture.asset("assets/icons/star_icon.svg")),
                   ],
                 ),
               ),
@@ -68,4 +71,23 @@ class BackgroundScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Route _createRoute() {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => PostScreen(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      const begin = Offset(0.0, 1.0);
+      const end = Offset.zero;
+      var curve = Curves.easeInOut;
+
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+      var offsetAnimation = animation.drive(tween);
+
+      return SlideTransition(
+        position: offsetAnimation,
+        child: child,
+      );
+    },
+  );
 }
