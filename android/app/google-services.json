@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "695373515565",
+    "project_id": "bamulguan",
+    "storage_bucket": "bamulguan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695373515565:android:2f6f82e2d7a89db19e21a4",
+        "android_client_info": {
+          "package_name": "com.junhyoekhan.bammulguan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUJlJQ8ZStPb56cZCFMA8HtL7AzMvyAjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
