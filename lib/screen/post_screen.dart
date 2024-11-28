@@ -1,5 +1,5 @@
+import 'package:bammulguan/screen/image_post_screen.dart';
 import 'package:flutter/material.dart';
-
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -9,7 +9,6 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
-
   final titleController = TextEditingController();
   final contentController = TextEditingController();
 
@@ -96,6 +95,15 @@ class _PostScreenState extends State<PostScreen> {
                   onPressed: () {
                     print(titleController.text);
                     print(contentController.text);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImagePostScreen(
+                              title: titleController.text,
+                              content: contentController.text),
+                        ),
+                        ModalRoute.withName('/')
+                    );
                   },
                   child: Text("다음"),
                   style: ElevatedButton.styleFrom(
