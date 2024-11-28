@@ -9,11 +9,20 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    titleController.dispose();
+    contentController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final titleController = TextEditingController();
-    final contentController = TextEditingController();
 
     return Scaffold(
       backgroundColor: Colors.black,
