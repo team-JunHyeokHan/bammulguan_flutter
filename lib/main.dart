@@ -13,19 +13,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: "Eulyoo", // 기본 폰트는 Eulyoo로 설정
-        textTheme: TextTheme(
-          titleLarge: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-          titleMedium: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-          titleSmall: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-          bodyLarge: TextStyle(color: Colors.white, fontFamily: 'Pretendard'),
-          bodyMedium: TextStyle(color: Colors.white, fontFamily: 'Pretendard'),
-          bodySmall: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-          labelLarge: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-          labelMedium: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-          labelSmall: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
-        ),
-      ),
+          fontFamily: "Eulyoo", // 기본 폰트는 Eulyoo로 설정
+          textTheme: TextTheme(
+            headlineSmall:
+                TextStyle(color: Colors.white, fontFamily: 'Eulyoo_SemiBold'),
+            titleLarge: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+            titleMedium: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+            titleSmall: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+            bodyLarge: TextStyle(color: Colors.white, fontFamily: 'Pretendard'),
+            bodyMedium:
+                TextStyle(color: Colors.white, fontFamily: 'Pretendard'),
+            bodySmall: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+            labelLarge: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+            labelMedium: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+            labelSmall: TextStyle(color: Colors.white, fontFamily: 'Eulyoo'),
+          ),
+          textSelectionTheme:
+              TextSelectionThemeData(cursorColor: Colors.white)),
       home: HomeScreen(),
     );
   }

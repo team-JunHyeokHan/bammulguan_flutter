@@ -79,6 +79,9 @@ flutter:
     - family: Eulyoo
       fonts:
         - asset: assets/fonts/eulyoo/Eulyoo1945-Regular.otf
+    - family: Eulyoo_SemiBold
+      fonts:
+        - asset: assets/fonts/eulyoo/Eulyoo1945-SemiBold.otf
     - family: Pretendard
       fonts:
         - asset: assets/fonts/pretendard/Pretendard-Regular.otf
