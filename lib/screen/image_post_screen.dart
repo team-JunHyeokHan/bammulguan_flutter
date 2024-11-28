@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
 class ImagePostScreen extends StatefulWidget {
   final String title;
@@ -41,13 +43,6 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 100, 20, 0),
-          child: Text(
-            "사진을 추가해주세요.",
-            style: textTheme.headlineSmall,
-          ),
-        ),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
@@ -56,7 +51,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("전시하기"),
+              child: Text("전시 하기"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,
@@ -68,6 +63,32 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               ),
             ),
           ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 100, 20, 0),
+              child: Text(
+                "사진을 추가해주세요.",
+                style: textTheme.headlineSmall,
+              ),
+            ),
+            SizedBox(height: 60,),
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 320,
+                width: 320,
+                decoration: BoxDecoration(
+                    border: DashedBorder.fromBorderSide(
+                        side: BorderSide(color: Colors.white, width: 2),
+                        dashLength: 15)
+                ),
+                child: IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/icons/camera_icon.svg",)),
+              ),
+            )
+          ],
         )
       ],
     ));
