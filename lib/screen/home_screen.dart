@@ -1,6 +1,4 @@
-
-
-
+import 'package:bammulguan/screen/background_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,22 +6,23 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      appBar: AppBar(title: Text("data"),),
-      body: Center(
-        child: Column(
-            children:[
-              Text("headlineLarge", style: textTheme.headlineLarge,),
-              Text("headlineMedium", style: textTheme.headlineMedium,),
-              Text("headlineSmall", style: textTheme.headlineSmall,),
-              Text("bodyLarge", style: textTheme.bodyLarge,),
-              Text("bodyMedium", style: textTheme.bodyMedium,),
-              Text("bodySmall", style: textTheme.bodySmall,),
-              Text("labelLarge", style: textTheme.labelLarge,),
-              Text("labelMedium", style: textTheme.labelMedium,),
-              Text("labelSmall", style: textTheme.labelSmall,),
-            ]
+    // 화면 높이를 계산
+
+    return BackgroundScreen(
+      child: SafeArea(
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(top: 80),
+            child: Container(
+              child: Center(
+                child: Text(
+                  "Content goes here",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
