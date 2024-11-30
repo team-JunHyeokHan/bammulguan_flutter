@@ -12,6 +12,7 @@
 .buildlog/
 .history
 .svn/
+lib/server_url.dart
 
 # IntelliJ related
 *.iml
