@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,8 +32,6 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
       _pickedImages.add(image);
     });
   }
-
-
 
 
     @override
@@ -94,14 +94,43 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
                 height: 320,
                 width: 320,
                 decoration: BoxDecoration(
-                    border: DashedBorder.fromBorderSide(
-                        side: BorderSide(color: Colors.white, width: 2),
-                        dashLength: 15)
+                  border: DashedBorder.fromBorderSide(
+                    side: BorderSide(color: Colors.white, width: 2),
+                    dashLength: 15,
+                  ),
                 ),
-                child: IconButton(onPressed: (){
-
-                  getImage(ImageSource.gallery);
-                }, icon: SvgPicture.asset("assets/icons/camera_icon.svg",)),
+                child: _pickedImages.isNotEmpty && _pickedImages.first != null
+                    ? Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Image.file(
+                        File(_pickedImages.first!.path),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _pickedImages.clear();
+                          });
+                        },
+                        child: const Icon(
+                          Icons.cancel_rounded,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                    : IconButton(
+                  onPressed: () {
+                    getImage(ImageSource.gallery);
+                  },
+                  icon: SvgPicture.asset("assets/icons/camera_icon.svg"),
+                ),
               ),
             )
           ],
