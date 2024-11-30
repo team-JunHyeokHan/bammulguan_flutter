@@ -1,5 +1,6 @@
 import 'package:bammulguan/screen/image_post_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -95,15 +96,23 @@ class _PostScreenState extends State<PostScreen> {
                   onPressed: () {
                     print(titleController.text);
                     print(contentController.text);
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ImagePostScreen(
-                              title: titleController.text,
-                              content: contentController.text),
-                        ),
-                        ModalRoute.withName('/')
-                    );
+                    if(titleController.text.isEmpty){
+                      showToast("제목을 추가해주세요");
+                    }
+                    else if(contentController.text.isEmpty){
+                      showToast("내용을 추가해주세요");
+                    }
+                    else{
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ImagePostScreen(
+                                title: titleController.text,
+                                content: contentController.text),
+                          ),
+                          ModalRoute.withName('/')
+                      );
+                    }
                   },
                   child: Text("다음"),
                   style: ElevatedButton.styleFrom(
@@ -123,4 +132,15 @@ class _PostScreenState extends State<PostScreen> {
       ),
     );
   }
+}
+
+void showToast(String message){
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
+  );
 }
