@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:bammulguan/server_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
+import 'package:dio/dio.dart';
 
 class ImagePostScreen extends StatefulWidget {
   final String title;
@@ -19,123 +21,165 @@ class ImagePostScreen extends StatefulWidget {
 class _ImagePostScreenState extends State<ImagePostScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print("가져온 데이터 ${widget.title}\n ${widget.content}");
   }
+
   final ImagePicker _picker = ImagePicker();
   final List<XFile?> _pickedImages = [];
+
+  // 이미지 선택
   void getImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(source: source);
 
     setState(() {
-      _pickedImages.add(image);
+      _pickedImages.clear(); // 기존 이미지 제거
+      _pickedImages.add(image); // 새 이미지 추가
     });
   }
 
+  // 업로드 함수
+  Future<void> uploadImage() async {
+    if (_pickedImages.isEmpty || _pickedImages.first == null) {
+      print("이미지가 선택되지 않았습니다.");
+      return;
+    }
 
-    @override
+    try {
+      File file = File(_pickedImages.first!.path);
+
+      // FormData 생성
+      FormData formData = FormData.fromMap({
+        "file": await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split('/').last,
+        ),
+      });
+
+      // Dio를 사용한 업로드 요청
+      var dio = Dio();
+      dio.options.contentType = 'multipart/form-data';
+
+      var response = await dio.post(
+        'http://$SERVER_URL/file', // 서버 업로드 URL
+        data: formData,
+      );
+
+      print('성공적으로 업로드되었습니다: ${response.data}');
+
+      // 업로드 성공 후 화면을 닫기
+      Navigator.pop(context); // "전시하기" 버튼 클릭 후 화면을 닫음
+    } catch (e) {
+      print("업로드 중 오류 발생: $e");
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return SafeArea(
-        child: Stack(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Align(
-            alignment: Alignment.topRight,
-            child: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.close_outlined,
-                color: Colors.white,
-                size: 36,
-              ),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("전시 하기"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                textStyle: textTheme.titleMedium,
-                minimumSize: Size(MediaQuery.of(context).size.width, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context); // 닫기
+                },
+                icon: const Icon(
+                  Icons.close_outlined,
+                  color: Colors.white,
+                  size: 36,
                 ),
               ),
             ),
           ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 100, 20, 0),
-              child: Text(
-                "사진을 추가해주세요.",
-                style: textTheme.headlineSmall,
-              ),
-            ),
-            SizedBox(height: 60,),
-            Align(
-              alignment: Alignment.center,
-              child: Container(
-                height: 320,
-                width: 320,
-                decoration: BoxDecoration(
-                  border: DashedBorder.fromBorderSide(
-                    side: BorderSide(color: Colors.white, width: 2),
-                    dashLength: 15,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {
+                  // "전시하기" 버튼 클릭 시 업로드 함수 호출
+                  // uploadImage();
+                  print(_pickedImages.first?.path);
+                },
+                child: Text("전시하기"),  // 텍스트는 "전시하기"
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  textStyle: textTheme.titleMedium,
+                  minimumSize: Size(MediaQuery.of(context).size.width, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
-                child: _pickedImages.isNotEmpty && _pickedImages.first != null
-                    ? Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Image.file(
-                        File(_pickedImages.first!.path),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _pickedImages.clear();
-                          });
-                        },
-                        child: const Icon(
-                          Icons.cancel_rounded,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-                    : IconButton(
-                  onPressed: () {
-                    getImage(ImageSource.gallery);
-                  },
-                  icon: SvgPicture.asset("assets/icons/camera_icon.svg"),
+              ),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 100, 20, 0),
+                child: Text(
+                  "사진을 추가해주세요.",
+                  style: textTheme.headlineSmall,
                 ),
               ),
-            )
-          ],
-        )
-      ],
-    ));
+              const SizedBox(height: 60),
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: 320,
+                  width: 320,
+                  decoration: BoxDecoration(
+                    border: DashedBorder.fromBorderSide(
+                      side: const BorderSide(color: Colors.white, width: 2),
+                      dashLength: 15,
+                    ),
+                  ),
+                  child: _pickedImages.isNotEmpty && _pickedImages.first != null
+                      ? Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.file(
+                          File(_pickedImages.first!.path),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 5,
+                        right: 5,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _pickedImages.clear(); // 이미지 삭제
+                            });
+                          },
+                          child: const Icon(
+                            Icons.cancel_rounded,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                      : IconButton(
+                    onPressed: () {
+                      getImage(ImageSource.gallery); // 갤러리에서 이미지 선택
+                    },
+                    icon: SvgPicture.asset(
+                        "assets/icons/camera_icon.svg"),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
