@@ -40,38 +40,59 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
 
   // 업로드 함수
   Future<void> uploadImage() async {
-    if (_pickedImages.isEmpty || _pickedImages.first == null) {
-      print("이미지가 선택되지 않았습니다.");
-      return;
+    String file = "";  // 기본값으로 빈 문자열을 설정
+
+    if (_pickedImages.isNotEmpty && _pickedImages.first != null) {
+      try {
+        File pickedFile = File(_pickedImages.first!.path);
+
+        // FormData 생성
+        FormData formData = FormData.fromMap({
+          "file": await MultipartFile.fromFile(
+            pickedFile.path,
+            filename: pickedFile.path.split('/').last,
+          ),
+        });
+
+        // Dio를 사용한 업로드 요청
+        var dio = Dio();
+        dio.options.contentType = 'multipart/form-data';
+
+        var response = await dio.post(
+          '$SERVER_URL/file', // 서버 업로드 URL
+          data: formData,
+        );
+
+        print('성공적으로 업로드되었습니다: ${response.data}');
+        file = response.data;  // 업로드된 파일의 URL 또는 데이터가 저장됨
+      } catch (e) {
+        print("업로드 중 오류 발생: $e");
+      }
     }
 
-    try {
-      File file = File(_pickedImages.first!.path);
+    // 업로드 함수 호출
+    upLoad(title: widget.title, content: widget.content, file: file);
+  }
 
-      // FormData 생성
-      FormData formData = FormData.fromMap({
-        "file": await MultipartFile.fromFile(
-          file.path,
-          filename: file.path.split('/').last,
-        ),
-      });
-
-      // Dio를 사용한 업로드 요청
-      var dio = Dio();
-      dio.options.contentType = 'multipart/form-data';
-
-      var response = await dio.post(
-        'http://$SERVER_URL/file', // 서버 업로드 URL
-        data: formData,
+  Future<void> upLoad(
+      {required String title, required String content, required String file}) async{
+    var dio = Dio();
+    try{
+      var response = await dio.request(
+        "$SERVER_URL/",
+        data: {
+          'title': title,
+          'content': content,
+          'files': file
+        },
+        options: Options(method:'POST'),
       );
-
-      print('성공적으로 업로드되었습니다: ${response.data}');
-
-      // 업로드 성공 후 화면을 닫기
-      Navigator.pop(context); // "전시하기" 버튼 클릭 후 화면을 닫음
-    } catch (e) {
-      print("업로드 중 오류 발생: $e");
+      print(response.data.toString());
+      Navigator.pop(context);
+    }catch(e){
+      print(e);
     }
+
   }
 
   @override
@@ -103,10 +124,10 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // "전시하기" 버튼 클릭 시 업로드 함수 호출
-                  // uploadImage();
+                  uploadImage();
                   print(_pickedImages.first?.path);
                 },
-                child: Text("전시하기"),  // 텍스트는 "전시하기"
+                child: Text("전시하기"), // 텍스트는 "전시하기"
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
@@ -143,37 +164,37 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
                   ),
                   child: _pickedImages.isNotEmpty && _pickedImages.first != null
                       ? Stack(
-                    children: [
-                      Positioned.fill(
-                        child: Image.file(
-                          File(_pickedImages.first!.path),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        top: 5,
-                        right: 5,
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _pickedImages.clear(); // 이미지 삭제
-                            });
-                          },
-                          child: const Icon(
-                            Icons.cancel_rounded,
-                            color: Colors.black87,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                          children: [
+                            Positioned.fill(
+                              child: Image.file(
+                                File(_pickedImages.first!.path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              top: 5,
+                              right: 5,
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _pickedImages.clear(); // 이미지 삭제
+                                  });
+                                },
+                                child: const Icon(
+                                  Icons.cancel_rounded,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       : IconButton(
-                    onPressed: () {
-                      getImage(ImageSource.gallery); // 갤러리에서 이미지 선택
-                    },
-                    icon: SvgPicture.asset(
-                        "assets/icons/camera_icon.svg"),
-                  ),
+                          onPressed: () {
+                            getImage(ImageSource.gallery); // 갤러리에서 이미지 선택
+                          },
+                          icon:
+                              SvgPicture.asset("assets/icons/camera_icon.svg"),
+                        ),
                 ),
               ),
             ],
