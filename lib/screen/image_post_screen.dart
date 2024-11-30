@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
 class ImagePostScreen extends StatefulWidget {
@@ -20,8 +21,20 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
     super.initState();
     print("가져온 데이터 ${widget.title}\n ${widget.content}");
   }
+  final ImagePicker _picker = ImagePicker();
+  final List<XFile?> _pickedImages = [];
+  void getImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(source: source);
 
-  @override
+    setState(() {
+      _pickedImages.add(image);
+    });
+  }
+
+
+
+
+    @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return SafeArea(
@@ -85,7 +98,10 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
                         side: BorderSide(color: Colors.white, width: 2),
                         dashLength: 15)
                 ),
-                child: IconButton(onPressed: (){}, icon: SvgPicture.asset("assets/icons/camera_icon.svg",)),
+                child: IconButton(onPressed: (){
+
+                  getImage(ImageSource.gallery);
+                }, icon: SvgPicture.asset("assets/icons/camera_icon.svg",)),
               ),
             )
           ],
