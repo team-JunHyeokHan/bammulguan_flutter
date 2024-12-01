@@ -12,18 +12,34 @@ class HomeScreen extends StatelessWidget {
       child: SafeArea(
         child: Align(
           alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(top: 80),
-            child: Container(
+          child: Container(
               child: Center(
-                child: Text(
-                  "Content goes here",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: textPost("title", "ㅁㄴ이ㅏ러ㅏㅣㄴㅁ어리ㅏㅁ너리ㅏㅓㅁㄴ이라ㅓㄴ미;ㅏㅓㄹㅇ니;ㅏ", context),
               ),
             ),
           ),
         ),
+    );
+  }
+
+  Widget textPost(String title, String content, BuildContext context){
+    final textTheme = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(right: 80, bottom: 120),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("지금 느낌", style: textTheme.titleLarge,),
+          SizedBox(height: 20,),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: Text(
+              content,
+              style: const TextStyle(fontSize: 16),
+            ),
+          )
+        ],
       ),
     );
   }
