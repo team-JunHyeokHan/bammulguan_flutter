@@ -101,6 +101,7 @@ class _ImageBoardWidgetState extends State<ImageBoardWidget>
           alignment: Alignment.bottomCenter,
           child: Container(
             height: screenHeight - 80,
+            width: double.infinity,
             child: Image.network(
               widget.file,
               fit: BoxFit.cover,

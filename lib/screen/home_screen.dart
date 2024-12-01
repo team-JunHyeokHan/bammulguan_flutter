@@ -81,16 +81,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? post['imageUrl'][0]['url']
                 : '';
 
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: imageUrl.isEmpty
+            return
+              imageUrl.isEmpty
                   ? textBoard(post['title'], post['content'], context)
                   : ImageBoardWidget(
                 title: post['title'],
                 content: post['content'],
                 file: imageUrl,
-              ),
-            );
+              );
+
           },
           scrollDirection: Axis.vertical,
         ),
