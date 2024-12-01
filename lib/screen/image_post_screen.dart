@@ -39,9 +39,9 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
   }
 
   // 업로드 함수
-  Future<void> uploadImage() async {
+  Future<void> uploadImage(BuildContext context) async {
     String file = "";  // 기본값으로 빈 문자열을 설정
-
+    int? fileId;
     if (_pickedImages.isNotEmpty && _pickedImages.first != null) {
       try {
         File pickedFile = File(_pickedImages.first!.path);
@@ -64,18 +64,29 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
         );
 
         print('성공적으로 업로드되었습니다: ${response.data}');
-        file = response.data;  // 업로드된 파일의 URL 또는 데이터가 저장됨
+        var responseData = response.data;
+        file = response.data;// 업로드된 파일의 URL 또는 데이터가 저장됨
+        if (responseData is Map<String, dynamic>) {
+          fileId = responseData['id'];  // id 추출
+          file = responseData['url'];   // url 추출
+          print(fileId);
+        }
+        print("asdf${response.data}");
       } catch (e) {
         print("업로드 중 오류 발생: $e");
       }
     }
 
     // 업로드 함수 호출
-    upLoad(title: widget.title, content: widget.content, file: file);
+    await upLoad(title: widget.title, content: widget.content, fileId: fileId, context: context);
   }
 
   Future<void> upLoad(
-      {required String title, required String content, required String file}) async{
+      {required String title,
+        required String content,
+        required int? fileId,
+      required BuildContext context}
+      ) async{
     var dio = Dio();
     try{
       var response = await dio.request(
@@ -83,12 +94,14 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
         data: {
           'title': title,
           'content': content,
-          'files': file
+          'files': fileId
         },
         options: Options(method:'POST'),
       );
-      print(response.data.toString());
-      Navigator.pop(context);
+      print(response.statusCode);
+      if(response.statusCode == 200){
+        Navigator.pop(context);
+      }
     }catch(e){
       print(e);
     }
@@ -124,7 +137,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // "전시하기" 버튼 클릭 시 업로드 함수 호출
-                  uploadImage();
+                  uploadImage(context);
                   print(_pickedImages.first?.path);
                 },
                 child: Text("전시하기"), // 텍스트는 "전시하기"
