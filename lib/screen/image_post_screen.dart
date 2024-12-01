@@ -30,7 +30,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
 
   // 이미지 선택
   void getImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source);
+    final XFile? image = await _picker.pickImage(source: source, imageQuality: 30);
 
     setState(() {
       _pickedImages.clear(); // 기존 이미지 제거
@@ -38,17 +38,16 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
     });
   }
 
-  // 업로드 함수
-  Future<void> uploadImage() async {
-    String file = "";  // 기본값으로 빈 문자열을 설정
-
+  Future<void> uploadImage(BuildContext context) async {
+    String? fileUrl = "";  // 파일 URL을 저장할 변수 (빈 문자열로 초기화)
+    int? fileId;  // 파일 ID를 저장할 변수
     if (_pickedImages.isNotEmpty && _pickedImages.first != null) {
       try {
         File pickedFile = File(_pickedImages.first!.path);
 
         // FormData 생성
         FormData formData = FormData.fromMap({
-          "file": await MultipartFile.fromFile(
+          "files": await MultipartFile.fromFile(
             pickedFile.path,
             filename: pickedFile.path.split('/').last,
           ),
@@ -64,31 +63,51 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
         );
 
         print('성공적으로 업로드되었습니다: ${response.data}');
-        file = response.data;  // 업로드된 파일의 URL 또는 데이터가 저장됨
+        var responseData = response.data;
+
+        // 서버 응답에서 'data' 배열의 첫 번째 요소 추출
+        if (responseData is Map<String, dynamic>) {
+          // 'data' 배열 안의 첫 번째 객체에서 'url'과 'id' 추출
+          if (responseData['data'] != null && responseData['data'].isNotEmpty) {
+            var fileData = responseData['data'][0];
+            fileUrl = fileData['url'] ?? "";  // 'url'이 null이면 빈 문자열로 설정
+            fileId = fileData['id'] ?? 0;     // 'id'가 null이면 기본값 0으로 설정
+          }
+        }
+
+        print("Uploaded file URL: $fileUrl");
+        print("Uploaded file ID: $fileId");
+
       } catch (e) {
         print("업로드 중 오류 발생: $e");
       }
     }
 
     // 업로드 함수 호출
-    upLoad(title: widget.title, content: widget.content, file: file);
+    await upLoad(title: widget.title, content: widget.content, fileId: fileId, context: context);
   }
 
   Future<void> upLoad(
-      {required String title, required String content, required String file}) async{
+      {required String title,
+        required String content,
+        required int? fileId,
+      required BuildContext context}
+      ) async{
     var dio = Dio();
     try{
       var response = await dio.request(
-        "$SERVER_URL/",
+        "$SERVER_URL/board",
         data: {
           'title': title,
           'content': content,
-          'files': file
+          'files': fileId != null ? [fileId] : []
         },
         options: Options(method:'POST'),
       );
-      print(response.data.toString());
-      Navigator.pop(context);
+      print("ㅁㄴㅇㄹㄷㅈ${[fileId]}");
+      if(response.statusCode == 200){
+        Navigator.pop(context);
+      }
     }catch(e){
       print(e);
     }
@@ -124,7 +143,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   // "전시하기" 버튼 클릭 시 업로드 함수 호출
-                  uploadImage();
+                  uploadImage(context);
                   print(_pickedImages.first?.path);
                 },
                 child: Text("전시하기"), // 텍스트는 "전시하기"
