@@ -38,10 +38,9 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
     });
   }
 
-  // 업로드 함수
   Future<void> uploadImage(BuildContext context) async {
-    String file = "";  // 기본값으로 빈 문자열을 설정
-    int? fileId;
+    String? fileUrl = "";  // 파일 URL을 저장할 변수 (빈 문자열로 초기화)
+    int? fileId;  // 파일 ID를 저장할 변수
     if (_pickedImages.isNotEmpty && _pickedImages.first != null) {
       try {
         File pickedFile = File(_pickedImages.first!.path);
@@ -65,13 +64,20 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
 
         print('성공적으로 업로드되었습니다: ${response.data}');
         var responseData = response.data;
-        file = response.data;// 업로드된 파일의 URL 또는 데이터가 저장됨
+
+        // 서버 응답에서 'data' 배열의 첫 번째 요소 추출
         if (responseData is Map<String, dynamic>) {
-          fileId = responseData['id'];  // id 추출
-          file = responseData['url'];   // url 추출
-          print(fileId);
+          // 'data' 배열 안의 첫 번째 객체에서 'url'과 'id' 추출
+          if (responseData['data'] != null && responseData['data'].isNotEmpty) {
+            var fileData = responseData['data'][0];
+            fileUrl = fileData['url'] ?? "";  // 'url'이 null이면 빈 문자열로 설정
+            fileId = fileData['id'] ?? 0;     // 'id'가 null이면 기본값 0으로 설정
+          }
         }
-        print("asdf${response.data}");
+
+        print("Uploaded file URL: $fileUrl");
+        print("Uploaded file ID: $fileId");
+
       } catch (e) {
         print("업로드 중 오류 발생: $e");
       }
@@ -94,11 +100,11 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
         data: {
           'title': title,
           'content': content,
-          'files': fileId
+          'files': fileId != null ? [fileId] : []
         },
         options: Options(method:'POST'),
       );
-      print(response.statusCode);
+      print("ㅁㄴㅇㄹㄷㅈ${[fileId]}");
       if(response.statusCode == 200){
         Navigator.pop(context);
       }
