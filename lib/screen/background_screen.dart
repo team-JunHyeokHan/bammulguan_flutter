@@ -52,7 +52,7 @@ class BackgroundScreen extends StatelessWidget {
 
 
             ...generateRandomContainers(),
-            child,
+            Center(child: child),
             SafeArea(
               bottom: false,
               child: Padding(
