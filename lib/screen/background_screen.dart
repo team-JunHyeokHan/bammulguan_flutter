@@ -49,7 +49,12 @@ class BackgroundScreen extends StatelessWidget {
         color: Colors.black,
         child: Stack(
           children: [
+
+            // 랜덤 Container를 포함한 리스트
+            ...generateRandomContainers(),
+            child, // 사용자 지정 콘텐츠
             SafeArea(
+              bottom: false,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
@@ -63,9 +68,6 @@ class BackgroundScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // 랜덤 Container를 포함한 리스트
-            ...generateRandomContainers(),
-            child, // 사용자 지정 콘텐츠
           ],
         ),
       ),

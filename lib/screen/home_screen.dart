@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:bammulguan/screen/background_screen.dart';
+import 'package:bammulguan/widget/image_board_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,8 +16,9 @@ class HomeScreen extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-              child: Center(
-                child: textPost("title", "ㅁㄴ이ㅏ러ㅏㅣㄴㅁ어리ㅏㅁ너리ㅏㅓㅁㄴ이라ㅓㄴ미;ㅏㅓㄹㅇ니;ㅏ", context),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ImageBoardWidget(title: "title",content:  "ㅁㄴ이ㅏ러ㅏㅣㄴㅁ어리ㅏㅁ너리ㅏㅓㅁㄴ이라ㅓㄴ미;ㅏㅓㄹㅇ니;ㅏ", file: "/data/user/0/com.junhyoekhan.bammulguan/cache/957a80fb-4de8-4fec-93e9-5a4352d6a218/1000002830.jpg"),
               ),
             ),
           ),
@@ -22,7 +26,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget textPost(String title, String content, BuildContext context){
+  Widget textBoard(String title, String content, BuildContext context){
     final textTheme = Theme.of(context).textTheme;
     return Padding(
       padding: const EdgeInsets.only(right: 80, bottom: 120),
