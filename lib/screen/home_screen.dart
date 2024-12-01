@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bammulguan/server_url.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +16,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
   List<dynamic> posts = [];  // 서버에서 받아온 게시글들
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     fetchData();  // 서버에서 데이터 가져오기
+    _startPeriodicUpdate();
+    
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _timer.cancel();
+  }
+
+  // 3초마다 서버에서 데이터 새로 고침
+  void _startPeriodicUpdate() {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      print("asdfx");
+      fetchData();  // 3초마다 fetchData 호출
+    });
   }
 
   // 서버에서 데이터 가져오기
