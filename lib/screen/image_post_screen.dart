@@ -30,7 +30,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
 
   // 이미지 선택
   void getImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source);
+    final XFile? image = await _picker.pickImage(source: source, imageQuality: 30);
 
     setState(() {
       _pickedImages.clear(); // 기존 이미지 제거
@@ -48,7 +48,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
 
         // FormData 생성
         FormData formData = FormData.fromMap({
-          "file": await MultipartFile.fromFile(
+          "files": await MultipartFile.fromFile(
             pickedFile.path,
             filename: pickedFile.path.split('/').last,
           ),
@@ -79,7 +79,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
     var dio = Dio();
     try{
       var response = await dio.request(
-        "$SERVER_URL/",
+        "$SERVER_URL/board",
         data: {
           'title': title,
           'content': content,
