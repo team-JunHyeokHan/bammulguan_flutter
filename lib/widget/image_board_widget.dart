@@ -101,8 +101,8 @@ class _ImageBoardWidgetState extends State<ImageBoardWidget>
           alignment: Alignment.bottomCenter,
           child: Container(
             height: screenHeight - 80,
-            child: Image.file(
-              File(widget.file),
+            child: Image.network(
+              widget.file,
               fit: BoxFit.cover,
             ),
           ),
@@ -157,7 +157,7 @@ class _ImageBoardWidgetState extends State<ImageBoardWidget>
             return SlideTransition(
               position: _slideAnimation,
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.bottomLeft,
                 child: Container(
                   key: _contentKey, // Assign key to measure height
                   padding: const EdgeInsets.all(20),
