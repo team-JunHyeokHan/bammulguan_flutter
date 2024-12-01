@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:bammulguan/server_url.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isLoading = true;  // 데이터 로딩 상태
-  late String title;
-  late String content;
-  late String imageUrl;
+  bool isLoading = true;
+  List<dynamic> posts = [];  // 서버에서 받아온 게시글들
 
   @override
   void initState() {
@@ -33,17 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         final data = response.data;
 
-        // 서버에서 가져온 데이터 처리
         setState(() {
-          title = data['data'][3]['title'];  // 첫 번째 게시글
-          content = data['data'][3]['content'];  // 첫 번째 게시글의 content
-
-          // 이미지 URL 배열에서 첫 번째 요소만 사용
-          imageUrl = data['data'][3]['imageUrl'] != null && data['data'][3]['imageUrl'].isNotEmpty
-              ? data['data'][3]['imageUrl'][0]['url']  // 첫 번째 이미지 URL
-              : '';  // 이미지가 없으면 빈 문자열 사용
-
-          isLoading = false;  // 데이터 로딩 완료
+          posts = data['data'];
+          isLoading = false;
         });
       } else {
         print('서버 오류: ${response.statusCode}');
@@ -61,25 +50,39 @@ class _HomeScreenState extends State<HomeScreen> {
     return BackgroundScreen(
       child: SafeArea(
         child: isLoading
-            ? Center(child: CircularProgressIndicator())  // 데이터 로딩 중
-            : Align(
-          alignment: Alignment.bottomCenter,
-          child: imageUrl.isEmpty
-              ? textBoard(title, content, context)  // 이미지가 없으면 textBoard를 보여줌
-              : ImageBoardWidget(
-            title: title,  // 서버에서 가져온 title
-            content: content,  // 서버에서 가져온 content
-            file: imageUrl,  // 서버에서 가져온 첫 번째 이미지 URL
-          ),
+            ? Center(child: CircularProgressIndicator(
+          color: Colors.white,
+        ))  // 데이터 로딩 중
+            : PageView.builder(
+          itemCount: posts.length,  // 서버에서 받은 게시글 수만큼 페이지 생성
+          itemBuilder: (context, index) {
+            final post = posts[index];
+
+            // 첫 번째 이미지 URL만 사용
+            String imageUrl = post['imageUrl'] != null && post['imageUrl'].isNotEmpty
+                ? post['imageUrl'][0]['url']
+                : '';
+
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: imageUrl.isEmpty
+                  ? textBoard(post['title'], post['content'], context)
+                  : ImageBoardWidget(
+                title: post['title'],
+                content: post['content'],
+                file: imageUrl,
+              ),
+            );
+          },
+          scrollDirection: Axis.vertical,  // 스와이프 방향을 수직으로 설정
         ),
       ),
     );
   }
-
   Widget textBoard(String title, String content, BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.only(right: 80, bottom: 120),
+      padding: const EdgeInsets.only(left: 20, bottom: 120),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
