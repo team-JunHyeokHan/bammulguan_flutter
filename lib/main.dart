@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bammulguan/screen/background_screen.dart';
 import 'package:bammulguan/screen/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +99,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
+      body: BackgroundScreen(
         child: isAfterOneAM
             ? _buildSplashAfterOneAM()
             : _buildSplashBeforeOneAM(),
@@ -111,8 +112,42 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   Widget _buildSplashBeforeOneAM() {
-    return _buildAnimatedText();
+    return _buildAnimateText();
   }
+
+  Widget _buildAnimateText() {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _animation.value),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '밤물관',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontFamily: 'Eulyoo',
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '밤에 피는 박물관',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Eulyoo',
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget _buildAnimatedText() {
     return AnimatedBuilder(
@@ -120,13 +155,28 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       builder: (context, child) {
         return Transform.translate(
           offset: Offset(0, _animation.value),
-          child: Text(
-            '밤물관',
-            style: TextStyle(
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '밤물관',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontFamily: 'Eulyoo',
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '밤물관 개관시간이 아니예요.'
+                '다음에 또 와주세요.',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Eulyoo',
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         );
       },

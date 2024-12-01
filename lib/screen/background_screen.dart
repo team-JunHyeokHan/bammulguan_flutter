@@ -18,14 +18,14 @@ class BackgroundScreen extends StatelessWidget {
     final Random random = Random();
     final textTheme = Theme.of(context).textTheme;
 
-    // 화면 크기 정보를 얻기 위해 MediaQuery 사용
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // 랜덤 위치의 Container 리스트 생성
+
     List<Widget> generateRandomContainers() {
       return List.generate(numberOfContainers, (_) {
-        // 랜덤 위치 계산
+
         final double left = random.nextDouble() * screenWidth;
         final double top = random.nextDouble() * screenHeight;
 
@@ -49,7 +49,12 @@ class BackgroundScreen extends StatelessWidget {
         color: Colors.black,
         child: Stack(
           children: [
+
+
+            ...generateRandomContainers(),
+            Center(child: child),
             SafeArea(
+              bottom: false,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Row(
@@ -63,9 +68,6 @@ class BackgroundScreen extends StatelessWidget {
                 ),
               ),
             ),
-            // 랜덤 Container를 포함한 리스트
-            ...generateRandomContainers(),
-            child, // 사용자 지정 콘텐츠
           ],
         ),
       ),
