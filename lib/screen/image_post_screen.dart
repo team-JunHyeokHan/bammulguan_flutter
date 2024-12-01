@@ -126,7 +126,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context); // 닫기
+                  Navigator.pop(context);
                 },
                 icon: const Icon(
                   Icons.close_outlined,
@@ -142,11 +142,10 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               padding: const EdgeInsets.all(20),
               child: ElevatedButton(
                 onPressed: () {
-                  // "전시하기" 버튼 클릭 시 업로드 함수 호출
                   uploadImage(context);
                   print(_pickedImages.first?.path);
                 },
-                child: Text("전시하기"), // 텍스트는 "전시하기"
+                child: Text("전시하기"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
@@ -196,7 +195,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   setState(() {
-                                    _pickedImages.clear(); // 이미지 삭제
+                                    _pickedImages.clear();
                                   });
                                 },
                                 child: const Icon(
@@ -209,7 +208,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
                         )
                       : IconButton(
                           onPressed: () {
-                            getImage(ImageSource.gallery); // 갤러리에서 이미지 선택
+                            getImage(ImageSource.gallery);
                           },
                           icon:
                               SvgPicture.asset("assets/icons/camera_icon.svg"),

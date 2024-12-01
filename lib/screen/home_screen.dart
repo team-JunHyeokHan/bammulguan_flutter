@@ -15,37 +15,36 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
-  List<dynamic> posts = [];  // 서버에서 받아온 게시글들
+  List<dynamic> posts = [];
   late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    fetchData();  // 서버에서 데이터 가져오기
+    fetchData();
     _startPeriodicUpdate();
     
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+
     super.dispose();
     _timer.cancel();
   }
 
-  // 3초마다 서버에서 데이터 새로 고침
+
   void _startPeriodicUpdate() {
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       print("asdfx");
-      fetchData();  // 3초마다 fetchData 호출
+      fetchData();
     });
   }
 
-  // 서버에서 데이터 가져오기
   Future<void> fetchData() async {
     try {
       final dio = Dio();
-      final response = await dio.get("$SERVER_URL/board");  // 서버 URL
+      final response = await dio.get("$SERVER_URL/board");
 
       if (response.statusCode == 200) {
         final data = response.data;
@@ -72,13 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
         child: isLoading
             ? Center(child: CircularProgressIndicator(
           color: Colors.white,
-        ))  // 데이터 로딩 중
+        ))
             : PageView.builder(
-          itemCount: posts.length,  // 서버에서 받은 게시글 수만큼 페이지 생성
+          itemCount: posts.length,
           itemBuilder: (context, index) {
             final post = posts[index];
 
-            // 첫 번째 이미지 URL만 사용
             String imageUrl = post['imageUrl'] != null && post['imageUrl'].isNotEmpty
                 ? post['imageUrl'][0]['url']
                 : '';
@@ -94,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           },
-          scrollDirection: Axis.vertical,  // 스와이프 방향을 수직으로 설정
+          scrollDirection: Axis.vertical,
         ),
       ),
     );

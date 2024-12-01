@@ -107,7 +107,7 @@ class _ImageBoardWidgetState extends State<ImageBoardWidget>
             ),
           ),
         ),
-        // Title and truncated content
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
           child: Column(
@@ -150,7 +150,7 @@ class _ImageBoardWidgetState extends State<ImageBoardWidget>
             ],
           ),
         ),
-        // Animated content display
+
         AnimatedBuilder(
           animation: _animationController,
           builder: (context, child) {
@@ -159,7 +159,7 @@ class _ImageBoardWidgetState extends State<ImageBoardWidget>
               child: Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
-                  key: _contentKey, // Assign key to measure height
+                  key: _contentKey,
                   padding: const EdgeInsets.all(20),
                   child: GestureDetector(
                     onTap: () {

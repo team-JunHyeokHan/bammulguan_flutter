@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'pagination_model.freezed.dart';  // freezed 코드 생성을 위한 파일
-part 'pagination_model.g.dart';  // json_serializable 코드 생성을 위한 파일
+part 'pagination_model.freezed.dart';
+part 'pagination_model.g.dart';
 
 @freezed
 class PaginationModel with _$PaginationModel {
@@ -9,11 +9,11 @@ class PaginationModel with _$PaginationModel {
     required int id,
     required String title,
     required String content,
-    required List<ImageUrl> imageUrl, // 이미지 URL을 포함한 모델
+    required List<ImageUrl> imageUrl,
   }) = _PaginationModel;
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) =>
-      _$PaginationModelFromJson(json);  // json에서 객체로 변환하는 메소드
+      _$PaginationModelFromJson(json);
 }
 
 @freezed
@@ -24,5 +24,5 @@ class ImageUrl with _$ImageUrl {
   }) = _ImageUrl;
 
   factory ImageUrl.fromJson(Map<String, dynamic> json) =>
-      _$ImageUrlFromJson(json);  // json에서 객체로 변환하는 메소드
+      _$ImageUrlFromJson(json);
 }

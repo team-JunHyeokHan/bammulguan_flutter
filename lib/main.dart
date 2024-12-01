@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-          fontFamily: "Eulyoo", // 기본 폰트는 Eulyoo로 설정
+          fontFamily: "Eulyoo",
           textTheme: TextTheme(
             headlineSmall:
                 TextStyle(color: Colors.white, fontFamily: 'Eulyoo_SemiBold'),
