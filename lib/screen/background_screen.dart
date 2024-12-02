@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 import 'package:bammulguan/screen/post_screen.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 class BackgroundScreen extends StatelessWidget {
   final Widget child;
   final int numberOfContainers;
+  final bool showAppbar;
 
   const BackgroundScreen({
     super.key,
     required this.child,
     this.numberOfContainers = 70,
+    required this.showAppbar
   });
 
   @override
@@ -53,6 +56,7 @@ class BackgroundScreen extends StatelessWidget {
 
             ...generateRandomContainers(),
             Center(child: child),
+            if(showAppbar)
             SafeArea(
               bottom: false,
               child: Padding(

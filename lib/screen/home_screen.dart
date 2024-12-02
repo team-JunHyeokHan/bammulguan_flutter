@@ -94,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.vertical,
         ),
       ),
+      showAppbar: true,
     );
   }
   Widget textBoard(String title, String content, BuildContext context) {

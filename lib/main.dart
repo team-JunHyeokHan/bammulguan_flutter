@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.white),
       ),
       home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -103,6 +104,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         child: isAfterOneAM
             ? _buildSplashAfterOneAM()
             : _buildSplashBeforeOneAM(),
+        showAppbar: false,
       ),
     );
   }
