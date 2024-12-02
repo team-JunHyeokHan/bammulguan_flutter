@@ -103,14 +103,14 @@ class _PostScreenState extends State<PostScreen> {
                       showToast("내용을 추가해주세요");
                     }
                     else{
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ImagePostScreen(
-                                title: titleController.text,
-                                content: contentController.text),
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImagePostScreen(
+                            title: titleController.text,
+                            content: contentController.text,
                           ),
-                          ModalRoute.withName('/')
+                        ),
                       );
                     }
                   },

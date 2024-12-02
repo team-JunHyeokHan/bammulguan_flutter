@@ -104,9 +104,8 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
         },
         options: Options(method:'POST'),
       );
-      print("ㅁㄴㅇㄹㄷㅈ${[fileId]}");
       if(response.statusCode == 200){
-        Navigator.pop(context);
+        Navigator.popUntil(context, (route) => route.isFirst);
       }
     }catch(e){
       print(e);
@@ -126,7 +125,7 @@ class _ImagePostScreenState extends State<ImagePostScreen> {
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.popUntil(context, (route) => route.isFirst);
                 },
                 icon: const Icon(
                   Icons.close_outlined,
